@@ -1,7 +1,7 @@
 <template>
   <div class="musiclistdetail">
     <div class="musiclistdetail__top">
-      <div class="musiclistdetail__top-left">
+      <div class="musiclistdetail__top-left" @click="backHome">
         <svg
           t="1663582875004"
           class="icon"
@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { reactive, onBeforeMount } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { getmusicListItem } from "../../../api/home/musicListDetail/index";
 import Music from "./music.vue";
 import type { StickyProps, StickyPosition } from "vant";
@@ -119,6 +119,7 @@ let data = reactive<data>({
   msg: {},
 });
 
+//获取路由
 const router = useRoute();
 let props = reactive({
     id: router.query.id,
@@ -130,6 +131,12 @@ onBeforeMount(async () => {
   props.subscribedCount = src.data.playlist.subscribedCount;
   console.log(src);
 });
+
+//返回上一级
+const Router = useRouter();
+const backHome = () => {
+  Router.go(-1);
+}
 
 
 </script>

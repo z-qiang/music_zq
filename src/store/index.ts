@@ -6,7 +6,7 @@ const mainStore = defineStore('main', {
             //当前歌单
             musicList: [
                 {
-                    id: 1331593956,
+                    id: 476659144,
                     al: {
                         id: 35458196,
                         name: "小宇",

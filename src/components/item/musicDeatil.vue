@@ -32,8 +32,8 @@
       </div>
       <span></span>
     </div>
-    <div class="musicDetail__center" @click="changeWord">
-      <div v-if="showWord">
+    <div class="musicDetail__center">
+      <div v-if="showWord" @click="changeWord">
         <img
           :class="[
             src.musicState
@@ -64,6 +64,8 @@
         </div>
       </div>
       <div
+        v-else
+        @click="changeWord"
         v-for="(item, index) in msg.lyc"
         :key="index"
         :class="[
@@ -256,12 +258,12 @@ const store = mainStore();
 let isShow: boolean = false;
 
 //切换图片和歌词
-let showWord: boolean = false;
-// const changeWord = () => {
-//   showWord = !showWord;
-//   console.log("????");
-//   console.log(showWord);
-// };
+let showWord = ref<boolean>(false);
+const changeWord = () => {
+  showWord.value = !showWord.value;
+  console.log("????");
+  console.log(showWord.value);
+};
 
 //关闭detail
 const emit = defineEmits(["closeDetail"]);
@@ -314,7 +316,7 @@ const getDom = () => {
   const dom: any = document.querySelector(".musicDetail__center");
   if (domWord && dom) {
     if (domWord.offsetTop > 329) {
-      dom.scrollTop = domWord.offsetTop - 350;
+      dom.scrollTop = domWord.offsetTop - 300;
     }
   }
 };
@@ -326,11 +328,13 @@ watch(Props_data, () => {
 <style scoped lang="less">
 @import "../../assets/CSS/measure";
 @import "../../assets/CSS/text";
+@import "../../assets/CSS/color";
 @bgc: rgba(255, 255, 255, 0.1);
 @word-color: white;
 .musicDetail {
   width: 100%;
   height: @main_bottom_height;
+  background-color: @bgc;
   &__bgimg {
     position: absolute;
     z-index: -1;
@@ -378,12 +382,12 @@ watch(Props_data, () => {
     &-word {
       margin: 0.2rem 0.2rem;
       font-size: 0.3rem;
-      color: rgba(223, 223, 223, 0.8);
+      color: white;
     }
     &-nowword {
       margin: @margin;
       font-size: 0.4rem;
-      color: white;
+      color: @default_purple;
     }
     &-top {
       width: 2.4rem;
@@ -443,14 +447,10 @@ watch(Props_data, () => {
 
     @keyframes rotate_yuan {
       0% {
-        // transform: rotateY(0);
-        // overflow: hidden;
         transform: rotateZ(0);
       }
       100% {
         transform: rotateZ(360deg);
-        // overflow: hidden;
-        // transform: rotateY(360deg);
       }
     }
   }
