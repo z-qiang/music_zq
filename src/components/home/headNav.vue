@@ -21,7 +21,7 @@
       <div class="headNav__center__mine">我的</div>
       <div class="headNav__center__find">发现</div>
     </div>
-    <div class="headNav__right">
+    <div class="headNav__right" @click="openSearch">
       <svg
         t="1663396556615"
         class="icon"
@@ -42,6 +42,13 @@
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue'
+import { useRouter } from 'vue-router';
+//打开search页面
+const router = useRouter();
+const openSearch = () => {
+  router.push('/search');
+}
 </script>
 
 <style scoped lang="less">

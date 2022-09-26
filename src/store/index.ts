@@ -29,6 +29,7 @@ const mainStore = defineStore('main', {
             lyric: '',
             //歌曲时长
             duration: 0,
+            searchHistory: new Array(),
         }
     },
     actions: {
@@ -51,6 +52,17 @@ const mainStore = defineStore('main', {
             // //修改播放状态
             this.musicState = true;
         },
+
+        //储存历史记录
+        addSearchHistory(historyList: string) {
+            if (this.searchHistory.length < 10) {
+                this.searchHistory.unshift(historyList);
+                this.searchHistory = [...new Set(this.searchHistory)];
+            } else {
+                this.searchHistory.unshift(historyList);
+                this.searchHistory = [...new Set(this.searchHistory)];
+            }
+        }
     },
 });
 

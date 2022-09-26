@@ -11,5 +11,10 @@ const routes = [
         name: 'MusicListItem',
         component:() => import('../components/home/musicList/index.vue'),
     },
+    {
+        path: '/search',
+        name: 'Search',
+        component: () => import("../components/search/index.vue"),
+    }
 ]
 export default  routes

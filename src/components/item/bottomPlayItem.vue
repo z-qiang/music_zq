@@ -223,7 +223,7 @@ let audio: any = ref<HTMLDivElement>();
 let musicState = ref(store.musicState);
 let show = ref(false);
 //存储定时器
-let interval: any = reactive({});
+let inter: any = reactive({});
 //存储歌曲时间
 let timer = ref<number>(0);
 
@@ -239,6 +239,17 @@ onBeforeMount(async () => {
   let txt = await await getLyric(store.musicList[store.index].id);
   store.lyric = txt.data.lrc.lyric;
 });
+
+//传递歌曲播放了多久
+const musicCurrentTime = () => {
+  inter = setInterval(() => {
+    timer.value = audio.value.currentTime;    
+    if(audio.value.duration == audio.value.currentTime){
+      store.musicState = false;
+    }
+  }, 1000);
+};
+
 watch(
   store,
   async (newV, oldV) => {
@@ -262,7 +273,9 @@ watch(
       musicCurrentTime();
       console.log("歌曲播放", store.musicState);
     } else {
-      clearInterval(interval);
+      //todo 清除计时器不成功
+      clearInterval(inter);    
+      inter = null;      
     }
 
     //存储歌曲时间
@@ -271,6 +284,8 @@ watch(
     if(audio.value.duration){
       store.duration = audio.value.duration;
     }
+
+
   },
   {
     deep: true,
@@ -342,13 +357,6 @@ const cloesShow = () => {
 //获取detail组件状态
 const closeDetail = (value: boolean) => {
   show.value = value;
-};
-
-//传递歌曲播放了多久
-const musicCurrentTime = () => {
-  interval = setInterval(() => {
-    timer.value = audio.value.currentTime;
-  }, 1000);
 };
 
 //接收传过来的拖拽时间
