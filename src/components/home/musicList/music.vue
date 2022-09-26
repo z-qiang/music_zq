@@ -82,7 +82,6 @@ onBeforeMount(async () => {
 
 const playMusic = (index: any) => {
   if (count === 0) {
-    // store.musicList.unshift(musicList.msg);
     store.addMusic(musicList.msg,"歌单");
     console.log("??", store.musicList);
     count = 1;

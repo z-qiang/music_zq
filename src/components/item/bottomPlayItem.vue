@@ -40,7 +40,7 @@
       <van-button
         class="bottomplay__right-center"
         @click="judgeMusicState"
-        v-if="src.musicState"
+        v-if="store.musicState"
       >
         <svg
           t="1663749578986"
@@ -177,6 +177,7 @@
       >
         <MusicDetail
           @closeDetail="closeDetail"
+          @changeMusicTime="changeMusicTime"
           :src="src"
           :judgeMusicState="judgeMusicState"
           :nextMusic="nextMusic"
@@ -218,6 +219,7 @@ let src = reactive({
 });
 // let audio = ref<HTMLDivElement>();
 let audio: any = ref<HTMLDivElement>();
+
 let musicState = ref(store.musicState);
 let show = ref(false);
 //存储定时器
@@ -227,16 +229,16 @@ let timer = ref<number>(0);
 
 onBeforeMount(async () => {
   src.url = `https://music.163.com/song/media/outer/url?id=${
-      store.musicList[store.index].id
-    }.mp3`;
-    src.imgSrc = store.musicList[store.index]?.al?.picUrl;
-    src.musicName = store.musicList[store.index]?.al?.name;
-    src.musicState = store.musicState;
+    store.musicList[store.index].id
+  }.mp3`;
+  src.imgSrc = store.musicList[store.index]?.al?.picUrl;
+  src.musicName = store.musicList[store.index]?.al?.name;
+  src.musicState = store.musicState;
 
-        //存储歌词
-    let txt = await await getLyric(store.musicList[store.index].id);
-    store.lyric = txt.data.lrc.lyric;
-})
+  //存储歌词
+  let txt = await await getLyric(store.musicList[store.index].id);
+  store.lyric = txt.data.lrc.lyric;
+});
 watch(
   store,
   async (newV, oldV) => {
@@ -247,7 +249,10 @@ watch(
     src.musicName = store.musicList[store.index]?.al?.name;
     src.musicState = store.musicState;
     nextTick(() => {
-      audio.value.autoplay = true;
+      if (store.musicState) {
+        //切歌自动播放
+        audio.value.autoplay = true;
+      }
     });
     //存储歌词
     let txt = await await getLyric(store.musicList[store.index].id);
@@ -255,9 +260,16 @@ watch(
     //存储歌曲当前时间
     if (store.musicState) {
       musicCurrentTime();
-      console.log('歌曲播放',store.musicState);
+      console.log("歌曲播放", store.musicState);
     } else {
       clearInterval(interval);
+    }
+
+    //存储歌曲时间
+    audio.value.preload = {metadata: true};
+    //需要判断，不然可能会因为没有获取到媒体而出现NaN的情况
+    if(audio.value.duration){
+      store.duration = audio.value.duration;
     }
   },
   {
@@ -273,35 +285,43 @@ const judgeMusicState = () => {
     if (src.musicState) {
       src.musicState = !src.musicState;
       audio.value.pause();
-      store.musicState = src.musicState
+      store.musicState = src.musicState;
     } else {
       src.musicState = !src.musicState;
       audio.value.play();
-      store.musicState = src.musicState
+      store.musicState = src.musicState;
     }
   }
 };
 
-//上一首歌
+//下一首歌
 const nextMusic = () => {
   //判断防止越界
   if (store.index === store.musicList.length - 1) {
     store.index = 0;
+    audio.value.autoplay = true;
+    store.musicState = true;
   } else {
     store.index = store.index + 1;
+    audio.value.autoplay = true;
+    store.musicState = true;
   }
-  if(store.musicList.length === 1){
-    alert()
+  if (store.musicList.length <= 1) {
+    alert();
   }
 };
 
-//下一首歌
+//上一首歌
 const backMusic = () => {
   //判断防止越界
   if (store.index == 0) {
     store.index = store.musicList.length - 1;
+    audio.value.autoplay = true;
+    store.musicState = true;
   } else {
     store.index = store.index - 1;
+    audio.value.autoplay = true;
+    store.musicState = true;
   }
 };
 
@@ -330,6 +350,13 @@ const musicCurrentTime = () => {
     timer.value = audio.value.currentTime;
   }, 1000);
 };
+
+//接收传过来的拖拽时间
+const changeMusicTime = (value: number) => {
+  if(audio){
+    audio.value.currentTime = value;
+  }
+}
 </script>
 
 <style scoped lang="less">

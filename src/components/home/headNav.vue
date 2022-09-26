@@ -20,8 +20,6 @@
     <div class="headNav__center">
       <div class="headNav__center__mine">我的</div>
       <div class="headNav__center__find">发现</div>
-      <div class="headNav__center__search">云村</div>
-      <div class="headNav__center__video">视频</div>
     </div>
     <div class="headNav__right">
       <svg

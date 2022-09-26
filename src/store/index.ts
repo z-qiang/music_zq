@@ -27,6 +27,8 @@ const mainStore = defineStore('main', {
             musicId: 0,
             //歌词
             lyric: '',
+            //歌曲时长
+            duration: 0,
         }
     },
     actions: {

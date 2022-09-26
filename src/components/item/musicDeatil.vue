@@ -77,6 +77,25 @@
         {{ item.lyc }}
       </div>
     </div>
+    <div class="musicDetail__progress">
+      <span>{{
+        Math.floor((timer) / 60) + ":" + (((timer) % 60) / 100).toFixed(2).slice(-2)
+      }}</span>
+      <van-slider
+        class="musicDetail__progress__center"
+        v-model="timer"
+        :max="store.duration"
+        min="0"
+        @change="changeMusictime"
+      />
+      <span>
+        {{
+          Math.floor(store.duration / 60) +
+          ":" +
+          ((store.duration % 60) / 100).toFixed(2).slice(-2)
+        }}
+      </span>
+    </div>
     <div class="musicDetail__bottom">
       <div>
         <svg
@@ -138,7 +157,7 @@
             ></path>
           </svg>
         </van-button>
-        <van-button @click="judgeMusicState" v-if="src.musicState">
+        <van-button @click="judgeMusicState" v-if="store.musicState">
           <svg
             t="1663749578986"
             class="icon"
@@ -229,9 +248,11 @@ import {
   watch,
   onBeforeMount,
   ref,
+  computed
 } from "vue";
 import { Vue3Marquee } from "vue3-marquee";
 import "vue3-marquee/dist/style.css";
+import { Slider } from "vant";
 
 type data_props = {
   judgeMusicState: any;
@@ -261,12 +282,10 @@ let isShow: boolean = false;
 let showWord = ref<boolean>(false);
 const changeWord = () => {
   showWord.value = !showWord.value;
-  console.log("????");
-  console.log(showWord.value);
 };
 
 //关闭detail
-const emit = defineEmits(["closeDetail"]);
+const emit = defineEmits(["closeDetail","changeMusicTime"]);
 const closeDetail = () => {
   emit("closeDetail", isShow);
 };
@@ -292,8 +311,8 @@ const handleMusicLyc = () => {
     });
     //存储下一句歌词的时间在当前歌词，以获取一句歌词持续的时间
     msg.lyc.forEach((item: any, index: number) => {
-      if (index === msg.lyc.length - 1) {
-        item.future = 0;
+      if (index === msg.lyc.length - 1 || isNaN(msg.lyc[index + 1].time)) {
+        item.future = 10000000;
       } else {
         item.future = msg.lyc[index + 1].time;
       }
@@ -317,12 +336,32 @@ const getDom = () => {
   if (domWord && dom) {
     if (domWord.offsetTop > 329) {
       dom.scrollTop = domWord.offsetTop - 300;
+    } else {
+      dom.scrollTop = 0;
     }
   }
 };
 watch(Props_data, () => {
   getDom();
+
+  //自动播放下一首
+  // if (Props_data.timer === store.duration) {
+  //   Props_data.nextMusic();
+  // }
 });
+
+// computed(() => {
+//   return Props_data.timer/100
+// })
+
+//拖拽
+const getM = () => {
+  // 百分比*current = current
+};
+
+const changeMusictime = (value:number) => {
+  emit("changeMusicTime",value);
+}
 </script>
 
 <style scoped lang="less">
@@ -452,6 +491,24 @@ watch(Props_data, () => {
       100% {
         transform: rotateZ(360deg);
       }
+    }
+  }
+  &__center::-webkit-scrollbar {
+    display: none;
+  }
+  &__progress {
+    width: 100%;
+    position: absolute;
+    bottom: 1.2rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__center {
+      width: 100%;
+    }
+    span{
+      margin: @margin;
     }
   }
   &__bottom {
