@@ -29,7 +29,10 @@ const mainStore = defineStore('main', {
             lyric: '',
             //歌曲时长
             duration: 0,
+            //历史记录
             searchHistory: new Array(),
+            //底部播放器
+            bMusic: true,
         }
     },
     actions: {
@@ -43,8 +46,14 @@ const mainStore = defineStore('main', {
         addMusic(val: any, state: string) {
             if (state === "歌单") {
                 this.musicList = val;
+                this.musicState = true
             } else if (state === '单曲') {
                 this.musicList.unshift(val);
+                this.index = 0;
+                this.musicState = true
+                if(this.musicList.length >= 20){
+                    this.musicList.pop();
+                }
             }
         },
         //播放音乐，传入audio

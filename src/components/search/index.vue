@@ -36,8 +36,11 @@
     </div>
     <div class="search__before">
       <div class="search__before__history">
-        <div class="search__before__history-head">
-          <div>历史</div>
+        <div
+          class="search__before__history-head"
+          v-if="store.searchHistory.length"
+        >
+          <div style="fontweight:bolder">历史</div>
           <div @click="delHistory">
             <svg
               t="1664205820221"
@@ -64,22 +67,50 @@
             </svg>
           </div>
         </div>
-        <div class="search__before__history-content" v-if="store.searchHistory.length">
-          <div v-for="(item, index) in store.searchHistory" :key="index" @click="history_search(item)"> 
+        <div
+          class="search__before__history-content"
+          v-if="store.searchHistory.length"
+        >
+          <div
+            v-for="(item, index) in store.searchHistory"
+            :key="index"
+            @click="history_search(item)"
+          >
             {{ item }}
           </div>
         </div>
+      </div>
+      <div class="search__before__hotSearch" v-if="!data.searchResult">
+        <div class="search__before__hotSearch-title">热搜榜</div>
+        <div class="search__before__hotSearch-line"></div>
+        <div
+          v-for="(item, index) in data.hotSea"
+          :key="index"
+          :class="
+            index > 2
+              ? 'search__before__hotSearch-content black'
+              : 'search__before__hotSearch-content red'
+          "
+          @click="history_search(item.first)"
+        >
+          <div>{{ index + 1 }}</div>
+          <div>{{ item.first }}</div>
+        </div>
+      </div>
+      <div class="search__before__result">
+        <Result :list="data.searchResult" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, reactive } from "vue";
 import { Search } from "vant";
 import { useRouter } from "vue-router";
-import { defaultSearch } from "../../api/search/index";
+import { defaultSearch, hotSearch, searchResult } from "../../api/search/index";
 import { mainStore } from "../../store/index";
+import Result from "./result.vue";
 
 const router = useRouter();
 const store = mainStore();
@@ -88,20 +119,38 @@ let defaultWord = ref<string>();
 
 let val = ref<any>("");
 
+type data_msg = {
+  hotSea: object;
+  searchResult: any;
+};
+let data = reactive({
+  hotSea: {},
+  searchResult: "",
+});
+
 //life
 onBeforeMount(async () => {
+  //默认关键词
   let val = await defaultSearch();
   defaultWord.value = val.data.data.showKeyword;
+  //热搜列表
+  let aa = await hotSearch();
+  data.hotSea = aa.data.result.hots;
+  console.log(data.hotSea);
 });
 
 //method
 const onSearch = () => {
+  //默认关键词
   if (!val.value) {
     val.value = defaultWord.value;
     console.log(val.value);
   }
   //添加搜索记录
-  store.addSearchHistory(val.value);
+  //获得搜索结果
+  history_search(val.value);
+
+  // search_result(val.value);
 };
 
 //取消按钮
@@ -111,16 +160,28 @@ const onCancel = () => {
 
 //清除历史记录
 const delHistory = () => {
-    store.searchHistory.splice(0,store.searchHistory.length);
-}
-
-//Todo 进行搜索
+  store.searchHistory.splice(0, store.searchHistory.length);
+};
 
 //点击历史记录搜索
-const history_search = (val:string) => {
-    store.addSearchHistory(val);
-    //todo
-}
+const history_search = (clickVal: string) => {
+  store.addSearchHistory(clickVal);
+  //todo
+  search_result(clickVal);
+  //同步搜索框的值
+  val.value = clickVal;
+};
+
+//TO DO
+//搜索结果
+const search_result = async (value: string) => {
+  let aa = await searchResult(value);
+  data.searchResult = aa.data.result.songs;
+  console.log("结果");
+
+  console.log(aa);
+  //跳转进入搜索结果页
+};
 </script>
 
 <style scoped lang="less">
@@ -146,6 +207,7 @@ const history_search = (val:string) => {
   &__before {
     width: 100%;
     &__history {
+      border-bottom: 1px solid rgb(145, 145, 145);
       &-head {
         display: flex;
         justify-content: space-between;
@@ -161,12 +223,42 @@ const history_search = (val:string) => {
         flex-wrap: wrap;
         margin: 0 16px;
         div {
-          margin: .16rem .08rem;
+          margin: 0.16rem 0.08rem;
           background-color: rgba(145, 145, 145, 0.6);
           color: @default_purple;
           padding: 0.1rem 0.2rem;
           border-radius: @border-radius-big;
         }
+      }
+    }
+    &__hotSearch {
+      width: 100%;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 10px 10px 30px #f0efef, -10px -10px 30px #ffffff;
+      &-title {
+        margin: 0 0.32rem;
+        padding: 0.32rem 0;
+        font-weight: bolder;
+      }
+      &-line {
+        border-bottom: 1px solid #ccc;
+        margin: 0 16px;
+      }
+      &-content {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 16px;
+        justify-content: left;
+        align-items: center;
+        font-size: 18px;
+      }
+      .red :first-child {
+        color: red;
+        margin-right: 0.32rem;
+      }
+      .black :first-child {
+        margin-right: 0.32rem;
       }
     }
   }

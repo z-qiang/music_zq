@@ -18,8 +18,8 @@
       </svg>
     </div>
     <div class="headNav__center">
-      <div class="headNav__center__mine">我的</div>
-      <div class="headNav__center__find">发现</div>
+      <div :class="whichCom=='user'?'headNav__center-word':'headNav__center__mine'" @click="userFun">我的</div>
+      <div :class="whichCom=='find'?'headNav__center-word':'headNav__center__find'" @click="toFind">发现</div>
     </div>
     <div class="headNav__right" @click="openSearch">
       <svg
@@ -42,12 +42,36 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-import { useRouter } from 'vue-router';
+import {ref, defineEmits} from 'vue'
+import { useRouter,useRoute } from 'vue-router';
 //打开search页面
 const router = useRouter();
+const route = useRoute();
+const emit = defineEmits(['showUser','showFind']);
+let whichCom = ref('find');
 const openSearch = () => {
   router.push('/search');
+}
+
+const openUser = () => {
+  router.push('/user');
+}
+
+const toFind = () => {
+  whichCom.value = 'find';
+  emit('showFind',true);
+  
+}
+const toUser = () => {
+  whichCom.value = 'user';
+  if(sessionStorage.getItem('isLogin')=='true'){
+    emit('showUser',false);
+  }
+  
+}
+const userFun = () => {
+  toUser();
+  openUser();
 }
 </script>
 
@@ -72,6 +96,10 @@ const openSearch = () => {
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
+    &-word{
+            font-weight: bolder;
+      font-size: .32rem;
+    }
   }
   &__right {
     width: @head_width;

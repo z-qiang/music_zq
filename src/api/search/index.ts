@@ -8,8 +8,24 @@ function defaultSearch() {
     })
 }
 
+//简易热搜列表
+function hotSearch(){
+    return service({
+        method: 'GET',
+        url: '/search/hot',
+    })
+}
 
+//搜索结果
+function searchResult(value: string) {
+    return service({
+        method: 'GET',
+        url: `/cloudsearch?keywords=${value}`,
+    })
+};
 
 export {
     defaultSearch,
+    hotSearch,
+    searchResult
 }
