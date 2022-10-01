@@ -56,41 +56,41 @@
       </div>
     </div>
     <div class="musiclistdetail__center">
-      <img :src="data.msg.coverImgUrl" class="musiclistdetail__center-bg" />
+      <img :src="data?.msg?.coverImgUrl" class="musiclistdetail__center-bg" />
       <div class="musiclistdetail__center-content">
         <div class="musiclistdetail__center-content-left">
           <div></div>
-          <img :src="data.msg.coverImgUrl" />
+          <img :src="data.msg?.coverImgUrl" />
         </div>
         <div class="musiclistdetail__center-content-right">
           <div class="musiclistdetail__center-content-right--name">
-            {{ data.msg.name }}
+            {{ data.msg?.name }}
           </div>
           <div
             class="musiclistdetail__center-content-right--tag"
-            v-if="data.msg.creator"
+            v-if="data.msg?.creator"
           >
             <img
-              :src="data.msg.creator.avatarUrl"
-              v-if="data.msg.creator.avatarUrl"
+              :src="data.msg?.creator?.avatarUrl"
+              v-if="data.msg?.creator?.avatarUrl"
               class="musiclistdetail__center-content-right--tag--img"
             />
             <div
               v-else
               class="musiclistdetail__center-content-right--tag--img"
             ></div>
-            <div>{{ data.msg.creator.nickname }}</div>
+            <div>{{ data?.msg?.creator?.nickname }}</div>
           </div>
           <div
             v-else
-            v-for="msg in data.msg.algTags"
+            v-for="msg in data?.msg?.algTags"
             :key="msg"
             class="musiclistdetail__center-content-right--tag"
           >
             {{ msg }}
           </div>
           <div class="musiclistdetail__center-content-right--description">
-            {{ data.msg.description }}
+            {{ data?.msg?.description }}
           </div>
         </div>
       </div>
@@ -109,14 +109,34 @@ import Music from "./music.vue";
 import type { StickyProps, StickyPosition } from "vant";
 
 type data = {
-    msg: object,
+    msg: {
+      description: any,
+      algTags: any,
+      creator:{
+        creator: any,
+        avatarUrl: any,
+        nickname: any,
+      },
+      coverImgUrl: any,
+      name: any,
+    },
 }
 type props = {
-    id: string | string[]
+    id: string | string[] | null,
     subscribedCount: number | string,
 }
-let data = reactive<data>({
-  msg: {},
+let data = reactive({
+   msg: {
+      description: {},
+      algTags: {},
+      creator:{
+        creator: {},
+        avatarUrl: '',
+        nickname:{},
+      },
+      coverImgUrl: '',
+      name: {},
+    },
 });
 
 //获取路由
@@ -138,6 +158,16 @@ const backHome = () => {
   Router.go(-1);
 }
 
+if(true){
+  console.log('undefind');
+  console.log(undefined == null);
+  
+  
+}
+if(null){
+  console.log('null');
+  
+}
 
 </script>
 

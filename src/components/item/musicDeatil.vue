@@ -36,7 +36,7 @@
       <div v-if="showWord" @click="changeWord">
         <img
           :class="[
-            src.musicState
+            src?.musicState
               ? 'musicDetail__center-top--play'
               : 'musicDetail__center-top',
           ]"
@@ -46,7 +46,7 @@
         <div
           class="musicDetail__center-bottom"
           :class="[
-            src.musicState
+            src?.musicState
               ? 'musicDetail__center-bottom-play'
               : 'musicDetail__center-bottom-paused',
           ]"
@@ -79,7 +79,7 @@
     </div>
     <div class="musicDetail__progress">
       <span>{{
-        Math.floor((timer) / 60) + ":" + (((timer) % 60) / 100).toFixed(2).slice(-2)
+        Math.floor(timer / 60) + ":" + ((timer % 60) / 100).toFixed(2).slice(-2)
       }}</span>
       <van-slider
         class="musicDetail__progress__center"
@@ -248,7 +248,7 @@ import {
   watch,
   onBeforeMount,
   ref,
-  computed
+  computed,
 } from "vue";
 import { Vue3Marquee } from "vue3-marquee";
 import "vue3-marquee/dist/style.css";
@@ -258,7 +258,12 @@ type data_props = {
   judgeMusicState: any;
   nextMusic: any;
   backMusic: any;
-  src: object;
+  src: {
+    url: any;
+    imgSrc: any;
+    musicName: any;
+    musicState: boolean;
+  };
   timer: number;
 };
 
@@ -285,7 +290,7 @@ const changeWord = () => {
 };
 
 //关闭detail
-const emit = defineEmits(["closeDetail","changeMusicTime"]);
+const emit = defineEmits(["closeDetail", "changeMusicTime"]);
 const closeDetail = () => {
   emit("closeDetail", isShow);
 };
@@ -359,9 +364,9 @@ const getM = () => {
   // 百分比*current = current
 };
 
-const changeMusictime = (value:number) => {
-  emit("changeMusicTime",value);
-}
+const changeMusictime = (value: number) => {
+  emit("changeMusicTime", value);
+};
 </script>
 
 <style scoped lang="less">
@@ -507,7 +512,7 @@ const changeMusictime = (value:number) => {
     &__center {
       width: 100%;
     }
-    span{
+    span {
       margin: @margin;
     }
   }

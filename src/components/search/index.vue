@@ -80,25 +80,25 @@
           </div>
         </div>
       </div>
-      <div class="search__before__hotSearch" v-if="!data.searchResult">
+      <div class="search__before__hotSearch" v-if="showHotSearch">
         <div class="search__before__hotSearch-title">热搜榜</div>
         <div class="search__before__hotSearch-line"></div>
         <div
           v-for="(item, index) in data.hotSea"
           :key="index"
           :class="
-            index > 2
+            Number(index)>2
               ? 'search__before__hotSearch-content black'
               : 'search__before__hotSearch-content red'
           "
-          @click="history_search(item.first)"
+          @click="history_search(item?.first)"
         >
           <div>{{ index + 1 }}</div>
-          <div>{{ item.first }}</div>
+          <div>{{ item?.first }}</div>
         </div>
       </div>
-      <div class="search__before__result">
-        <Result :list="data.searchResult" />
+      <div class="search__before__result" v-if="!showHotSearch">
+        <Result :list="data?.searchResult" />
       </div>
     </div>
   </div>
@@ -119,13 +119,35 @@ let defaultWord = ref<string>();
 
 let val = ref<any>("");
 
+let showHotSearch = ref(true);
+
 type data_msg = {
-  hotSea: object;
-  searchResult: any;
+  hotSea: {
+    first: any,
+  };
+  searchResult: [{
+    name: any,
+    al: {
+      picUrl: any,
+    },
+    ar:[
+      {name:any}
+    ],
+  }];
 };
-let data = reactive({
-  hotSea: {},
-  searchResult: "",
+let data = reactive<data_msg>({
+  hotSea: {
+    first:{},
+  },
+  searchResult: [{
+    name: '',
+    al: {
+      picUrl: '',
+    },
+    ar:[
+      {name:''}
+    ],
+  }],
 });
 
 //life
@@ -172,7 +194,6 @@ const history_search = (clickVal: string) => {
   val.value = clickVal;
 };
 
-//TO DO
 //搜索结果
 const search_result = async (value: string) => {
   let aa = await searchResult(value);
@@ -181,6 +202,9 @@ const search_result = async (value: string) => {
 
   console.log(aa);
   //跳转进入搜索结果页
+  if(showHotSearch.value){
+    showHotSearch.value = false;
+  }
 };
 </script>
 

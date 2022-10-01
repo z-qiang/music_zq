@@ -1,12 +1,22 @@
 <template>
   <div>
     <div class="result">
-      <div class="result__item" v-for="(item, index) in list" :key="index" @click="getMus(item)">
-        <img :src="item.al.picUrl" alt="" class="result__item-img" v-if="item.al.picUrl" />
-        <div class="result__item-img" v-if="!item.al.picUrl" ></div>
+      <div
+        class="result__item"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="getMus(item)"
+      >
+        <img
+          :src="item?.al?.picUrl"
+          alt=""
+          class="result__item-img"
+          v-if="item?.al?.picUrl"
+        />
+        <div class="result__item-img" v-if="!item?.al?.picUrl"></div>
         <div>
-          <span class="title">{{ item.name }}</span>
-          <span class="name">{{ item.ar[0].name }}</span>
+          <span class="title">{{ item?.name }}</span>
+          <span class="name">{{ item?.ar[0]?.name }}</span>
         </div>
       </div>
     </div>
@@ -16,20 +26,27 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 import { Image as VanImage } from "vant";
-import { getMusic } from '../../api/home/index';
-import { mainStore } from '../../store/index';
+import { getMusic } from "../../api/home/index";
+import { mainStore } from "../../store/index";
 
 const store = mainStore();
 type props = {
-  list: object;
+  list: [{
+    name: any,
+    al: {
+      picUrl: any,
+    },
+    ar:[
+      {name:any}
+    ],
+  }];
 };
 let Props = defineProps<props>();
 
 //播放
-const getMus = (value: object) => {
-    store.addMusic(value,'单曲');
-}
-
+const getMus = (value: any) => {
+  store.addMusic(value, "单曲");
+};
 </script>
 
 <style scoped lang="less">

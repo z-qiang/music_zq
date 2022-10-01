@@ -1,10 +1,10 @@
 <template>
   <div class="musiccomp">
     <div class="musiccomp__left">
-      <span>{{data.index + 1}}</span>
+      <span>{{Number(data.index) + 1}}</span>
       <div class="musiccomp__left-word">
-        <div class="musiccomp__left-word-top">{{data.item.name}}</div>
-        <div class="musiccomp__left-word-bottom">{{data.item.al.name}}</div>
+        <div class="musiccomp__left-word-top">{{data?.item?.name}}</div>
+        <div class="musiccomp__left-word-bottom">{{data?.item?.al?.name}}</div>
       </div>
     </div>
     <div class="musiccomp__right">
@@ -46,7 +46,12 @@
 <script setup lang="ts">
 import { defineProps,onMounted, onBeforeMount } from 'vue';
 type value = {
-    item: object,
+    item: {
+      name: any,
+      al:{
+        name: any,
+      }
+    },
     index: number | string,
 }
 type props = {

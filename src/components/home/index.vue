@@ -21,10 +21,23 @@ const showUser = (val: boolean) => {
 const showFind = (val: boolean) => {
   isShow.value = val;
 };
+
+let one = () => {
+  const xhr = new XMLHttpRequest();
+xhr.open('GET','banner?type=2');
+xhr.send();
+xhr.onreadystatechange = function() {
+  if(xhr.readyState===4 && xhr.status==200){
+    console.log(xhr.response);
+    console.log('???????');
+  }
+}
+}
 </script>
 
 <template>
   <div class="main">
+    <button @click="one">123123</button>
     <div class="main__header">
       <Suspense>
         <template #default>

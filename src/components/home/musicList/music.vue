@@ -26,7 +26,7 @@
       </div>
       <div class="music__head-right">
         <van-button type="danger"
-          >收藏量（{{ data.props.subscribedCount }}）</van-button
+          >收藏量（{{ props.subscribedCount }}）</van-button
         >
       </div>
     </div>
@@ -54,7 +54,7 @@ import { storeToRefs } from "pinia";
 const store = mainStore();
 
 type musicProps = {
-  id: string | string[];
+  id: any;
   subscribedCount: string | number;
 };
 type Props = {
