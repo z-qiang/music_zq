@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <router-view></router-view>
-    <div class="main__bottom" v-if="store.bMusic">
+    <div class="main__bottom" v-show="store.bMusic">
       <BottomPlayItem />
     </div>
   </div>

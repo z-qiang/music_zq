@@ -197,6 +197,7 @@ import { getMusic } from "../../api/home/index";
 import { Popup } from "vant";
 import MusicDetail from "./musicDeatil.vue";
 import { getLyric } from "../../api/home/index";
+import { Toast } from 'vant';
 
 type data_boi = {
   lyc: [
@@ -322,7 +323,7 @@ const nextMusic = () => {
     store.musicState = true;
   }
   if (store.musicList.length <= 1) {
-    alert();
+    Toast('播放列表无更多歌曲');
   }
 };
 
@@ -337,6 +338,9 @@ const backMusic = () => {
     store.index = store.index - 1;
     audio.value.autoplay = true;
     store.musicState = true;
+  };  
+  if (store.musicList.length <= 1) {
+    Toast('播放列表无更多歌曲');
   }
 };
 
