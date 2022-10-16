@@ -7,6 +7,7 @@ import './assets/CSS/icon.less';
 import 'vant/lib/index.css';
 
 
+
 const app = createApp(App);
 const pinia = createPinia();
 

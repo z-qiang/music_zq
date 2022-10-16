@@ -39,6 +39,35 @@ const routes = [
                 
             }
         }
+    },
+    {
+        path: '/daily',
+        name: 'Daily',
+        component: () => import('@/pages/dailyRec/index.vue'),
+        meta: {
+            name: '每日推荐',
+        }
+    },
+    {
+        path: '/musiclist',
+        name: 'MusicList',
+        component: () => import('@/pages/musicList/index.vue'),
+        meta: {
+            name: '歌单',
+        }
+    },
+    {
+        path: '/rank',
+        name: 'SingerRank',
+        component: () => import('@/pages/singerRank/index.vue'),
+        meta: {
+            name: '排行榜',
+        }
+    },
+    {
+        path: '/singer-song/:id',
+        name: 'SingerSong',
+        component: () => import('@/pages/singerRank/singer_song.vue'),
     }
 ]
 export default routes

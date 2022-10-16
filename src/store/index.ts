@@ -9,7 +9,7 @@ const mainStore = defineStore('main', {
                     id: 476659144,
                     al: {
                         id: 35458196,
-                        name: "小宇",
+                        name: "张震岳",
                         pic: 109951164548112690,
                         picUrl: "https://p1.music.126.net/4azOvzVWCzln6E84lPKZ9A==/109951164548112691.jpg",
                         pic_str: "109951164548112691",

@@ -1,10 +1,10 @@
 <template>
   <div class="musiccomp">
     <div class="musiccomp__left">
-      <span>{{Number(data.index) + 1}}</span>
+      <span>{{ Number(data.index) + 1 }}</span>
       <div class="musiccomp__left-word">
-        <div class="musiccomp__left-word-top">{{data?.item?.name}}</div>
-        <div class="musiccomp__left-word-bottom">{{data?.item?.al?.name}}</div>
+        <div class="musiccomp__left-word-top">{{ data.name }}</div>
+        <div class="musiccomp__left-word-bottom">{{ data.song.artists[0].name }}</div>
       </div>
     </div>
     <div class="musiccomp__right">
@@ -44,74 +44,74 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps,onMounted, onBeforeMount } from 'vue';
+import { defineProps, onMounted, onBeforeMount } from "vue";
 type value = {
-    item: {
-      name: any,
-      al:{
-        name: any,
-      }
-    },
-    index: number | string,
-}
+  name: string | undefined;
+  song: {
+    artists:any,
+  };
+  index: number | string;
+};
 
-// type value_msg = {
-//   id: number | string | undefined,
-//   item: any,
-// }
+// // type value_msg = {
+// //   id: number | string | undefined,
+// //   item: any,
+// // }
 
 type props = {
-    data: value,
-}
-defineProps<props>();
+  data: value;
+};
+
+const msg = defineProps<props>();
+
 
 </script>
 
 <style scoped lang="less">
-@import '../../../assets/CSS/text';
-@import '../../../assets/CSS/measure';
-@import '../../../assets/CSS/color';
+@import "../../assets/CSS/text";
+@import "../../assets/CSS/measure";
+@import "../../assets/CSS/color";
 @icon_size: 0.5rem;
-.musiccomp{
-    width: 100%;
-    height: 1rem;
-    // margin-top: 40px;
-    // background-color: pink;
+.musiccomp {
+  width: 100%;
+  height: 1rem;
+  // margin-top: 40px;
+  // background-color: pink;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  &__left {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    & > span {
+      width: 0.4rem;
+    }
+    &-word {
+      width: 5rem;
+      margin-left: @margin_line;
+      &-top {
+        #word_oneline();
+        font-weight: bolder;
+      }
+      &-bottom {
+        font-size: 0.14rem;
+        #word_oneline();
+        color: @text-color-transparent;
+        margin-top: @margin-top / 2;
+      }
+    }
+  }
+  &__right {
+    flex: 1;
     display: flex;
     justify-content: space-between;
-    box-sizing: border-box;
-    &__left{
-        display: flex;
-        // justify-content: center;
-        align-items: center;
-        &>span{
-            width: .4rem;
-        }
-        &-word{
-            width: 5rem;
-            margin-left: @margin_line;
-             &-top{
-                #word_oneline();
-                font-weight: bolder;
-             }
-             &-bottom{
-                font-size: 0.14rem;
-                 #word_oneline();
-                 color: @text-color-transparent;
-                 margin-top: @margin-top/2;
-             }
-        }
+    align-items: center;
+    margin-left: @margin_line;
+    .icon {
+      width: @icon_size;
+      height: @icon_size;
     }
-    &__right{
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-left:  @margin_line;
-        .icon{
-            width: @icon_size;
-            height: @icon_size;
-        }
-    }
+  }
 }
 </style>

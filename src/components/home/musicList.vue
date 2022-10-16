@@ -2,7 +2,8 @@
     <div class="musiclist">
         <div class="musiclist__top">
             <div class="musiclist__top-left">发现好歌单</div>
-            <div class="musiclist__top-right">查看更多</div>
+            <!-- todo:正确class名：musiclist__top-right -->
+            <div class="musiclist__top-right-miss"></div>
         </div>
         <div class="musiclist__bottom">
             <van-swipe :loop="false" :width="180" lazy-render :show-indicators="false">

@@ -233,9 +233,8 @@ onBeforeMount(async () => {
     store.musicList[store.index].id
   }.mp3`;
   src.imgSrc = store.musicList[store.index]?.al?.picUrl;
-  src.musicName = store.musicList[store.index]?.al?.name;
-  src.musicState = store.musicState;
-
+  src.musicName = store.musicList[store.index]?.name;
+  src.musicState = store.musicState;  
   //存储歌词
   let txt = await await getLyric(store.musicList[store.index].id);
   store.lyric = txt.data.lrc.lyric;
@@ -258,7 +257,7 @@ watch(
       store.musicList[store.index].id
     }.mp3`;
     src.imgSrc = store.musicList[store.index]?.al?.picUrl;
-    src.musicName = store.musicList[store.index]?.al?.name;
+    src.musicName = store.musicList[store.index]?.name;
     src.musicState = store.musicState;
     nextTick(() => {
       if (store.musicState) {
@@ -390,6 +389,10 @@ const changeMusicTime = (value: number) => {
     align-items: center;
     width: 3rem;
     margin-left: @margin_line;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: @border-radius-bigger;
     &-icon {
       width: @icon_scale;
       height: @icon_scale;

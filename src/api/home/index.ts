@@ -1,9 +1,8 @@
 import service from '../index';
-
 type serve = {
     methods: string,
     url: string,
-}
+};
 
 //获取banner
 function getBanner<serve>() {
@@ -11,7 +10,7 @@ function getBanner<serve>() {
         method: "GET",
         url: '/banner?type=2',
     })
-}
+};
 
 //获取歌单musiclist
 function getMusicList<serve>() {
@@ -19,7 +18,7 @@ function getMusicList<serve>() {
         method: "GET",
         url: '/personalized?limit=10',
     })
-}
+};
 
 //获取音乐
 function getMusic(id: number | string) {
@@ -28,18 +27,54 @@ function getMusic(id: number | string) {
         url: `/song/url/v1?id=${id}&level=standard`,
         // url: `/song/url?id=${id}`,
     })
-}
+};
 //获取歌词
 function getLyric(id: string | number) {
     return service({
         method: 'GET',
         url: `/lyric?id=${id}`
     })
+};
+
+//每日推荐
+function dailyRecommendation() {
+    return service({
+        method: 'GET',
+        url: `/personalized/newsong`,
+    })
+};
+//歌单
+function musicList() {
+    return service({
+        method: 'GET',
+        url: '/top/song?type=7',
+    })
 }
+
+//歌手排行榜
+function singerRank() {
+    return service({
+        method: 'GET',
+        url: '/toplist/artist/type=1?limit=20',
+    })
+}
+
+//获取歌手大热单曲
+function singerHotMusic(id: number) {
+    return service({
+        method: 'GET',
+        url: `/artists?id=${id}`,
+    })
+}
+
 
 export {
     getBanner,
     getMusicList,
     getMusic,
     getLyric,
-}
+    dailyRecommendation,
+    musicList,
+    singerRank,
+    singerHotMusic
+};

@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div class="search__head">
-      <div class="search__back" @click="router.go(-1)">
+      <div class="search__back" @click="router.push('/')">
         <svg
           t="1664201088743"
           class="icon"
