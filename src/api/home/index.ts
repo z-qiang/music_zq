@@ -60,13 +60,27 @@ function singerRank() {
 }
 
 //获取歌手大热单曲
-function singerHotMusic(id: number) {
+function singerHotMusic(id: number | string) {
     return service({
         method: 'GET',
         url: `/artists?id=${id}`,
     })
 }
 
+//查看歌曲是否有版权
+function copyRight(id: number | string) {
+    return service({
+        method: 'GET',
+        url: `/check/music?id=${id}`,
+    })
+}
+//查看歌曲是否可以播放全部
+function isPlay(id: number | string) {
+    return service({
+        method: 'GET',
+        url: `/song/url/v1?id=${id}&level=standard`,
+    })
+}
 
 export {
     getBanner,
@@ -76,5 +90,7 @@ export {
     dailyRecommendation,
     musicList,
     singerRank,
-    singerHotMusic
+    singerHotMusic,
+    copyRight,
+    isPlay,
 };

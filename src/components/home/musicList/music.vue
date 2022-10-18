@@ -34,7 +34,7 @@
       <div
         class="music__content-item"
         v-for="(item, index) in musicList.msg"
-        :key="item"
+        :key="index"
         @click="playMusic(index)"
       >
         <MusicCom :data="{ item: item, index: index }" />
@@ -74,19 +74,27 @@ let musicList = reactive<musiclist>({
 let count = 0;
 onBeforeMount(async () => {
   let value = await getmusicListItemMusic(data.props.id);
-  console.log(value);
-  musicList.msg = value.data.songs;
-  // store.musicList.unshift(value.data.songs);
-  // console.log('??',store.musicList);
+  musicList.msg = value.data.songs; 
 });
 
 const playMusic = (index: any) => {
-  if (count === 0) {
-    store.addMusic(musicList.msg,"歌单");
-    console.log("??", store.musicList);
-    count = 1;
+  let aa = {
+    id: 476659144,
+    al: {
+      name: "张震岳",
+      picUrl:
+        "https://p1.music.126.net/4azOvzVWCzln6E84lPKZ9A==/109951164548112691.jpg",
+    },
+    name: "小宇",
+  };
+  aa.id = musicList.msg[index].id;
+  aa.al.name = musicList.msg[index].al.name;
+  aa.al.picUrl = musicList.msg[index].al.picUrl;
+  aa.name = musicList.msg[index].name;
+  if (count !== index) {
+    store.addMusic(aa, "单曲");
+    count = index;
   }
-  store.index = index;
   store.musicState = true;
 };
 </script>

@@ -186,6 +186,7 @@
         />
       </van-popup>
     </div>
+    <VanDialog />
   </div>
 </template>
 
@@ -197,7 +198,9 @@ import { getMusic } from "../../api/home/index";
 import { Popup } from "vant";
 import MusicDetail from "./musicDeatil.vue";
 import { getLyric } from "../../api/home/index";
-import { Toast } from 'vant';
+import { Toast, Dialog } from "vant";
+
+const VanDialog = Dialog.Component;
 
 type data_boi = {
   lyc: [
@@ -229,22 +232,22 @@ let inter: any = reactive({});
 let timer = ref<number>(0);
 
 onBeforeMount(async () => {
-  src.url = `https://music.163.com/song/media/outer/url?id=${
-    store.musicList[store.index].id
-  }.mp3`;
-  src.imgSrc = store.musicList[store.index]?.al?.picUrl;
-  src.musicName = store.musicList[store.index]?.name;
-  src.musicState = store.musicState;  
-  //存储歌词
-  let txt = await await getLyric(store.musicList[store.index].id);
-  store.lyric = txt.data.lrc.lyric;
+  // src.url = `https://music.163.com/song/media/outer/url?id=${
+  //   store.musicList[store.index].id
+  // }.mp3`;
+  // src.imgSrc = store.musicList[store.index]?.al?.picUrl;
+  // src.musicName = store.musicList[store.index]?.name;
+  // src.musicState = store.musicState;
+  // //存储歌词
+  // let txt = await getLyric(store.musicList[store.index].id);
+  // store.lyric = txt.data.lrc.lyric;
 });
 
 //传递歌曲播放了多久
 const musicCurrentTime = () => {
   inter = setInterval(() => {
-    timer.value = audio.value.currentTime;    
-    if(audio.value.duration == audio.value.currentTime){
+    timer.value = audio.value.currentTime;
+    if (audio.value.duration == audio.value.currentTime) {
       store.musicState = false;
     }
   }, 1000);
@@ -253,8 +256,10 @@ const musicCurrentTime = () => {
 watch(
   store,
   async (newV, oldV) => {
+    console.log("福格但", store.musicList[0].id);
+
     src.url = `https://music.163.com/song/media/outer/url?id=${
-      store.musicList[store.index].id
+      store.musicList[store.index]?.id
     }.mp3`;
     src.imgSrc = store.musicList[store.index]?.al?.picUrl;
     src.musicName = store.musicList[store.index]?.name;
@@ -266,7 +271,7 @@ watch(
       }
     });
     //存储歌词
-    let txt = await await getLyric(store.musicList[store.index].id);
+    let txt = await getLyric(store.musicList[store.index].id);
     store.lyric = txt.data.lrc.lyric;
     //存储歌曲当前时间
     if (store.musicState) {
@@ -274,18 +279,34 @@ watch(
       console.log("歌曲播放", store.musicState);
     } else {
       //todo 清除计时器不成功
-      clearInterval(inter);    
-      inter = null;      
+      clearInterval(inter);
+      inter = null;
     }
-
     //存储歌曲时间
-    audio.value.preload = {metadata: true};
+    audio.value.preload = { metadata: true };
     //需要判断，不然可能会因为没有获取到媒体而出现NaN的情况
-    if(audio.value.duration){
+    if (audio.value.duration) {
       store.duration = audio.value.duration;
     }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 
-
+watch(
+  () => {
+    store.playMessage;
+  },
+  (newValue, oldValue) => {
+    if (store.playMessage) {
+      Dialog.alert({
+        message: "该歌曲需要vip！！！",
+      }).then(() => {
+        store.playMessage = false;
+      });
+    }
   },
   {
     deep: true,
@@ -322,7 +343,7 @@ const nextMusic = () => {
     store.musicState = true;
   }
   if (store.musicList.length <= 1) {
-    Toast('播放列表无更多歌曲');
+    Toast("播放列表无更多歌曲");
   }
 };
 
@@ -337,14 +358,14 @@ const backMusic = () => {
     store.index = store.index - 1;
     audio.value.autoplay = true;
     store.musicState = true;
-  };  
+  }
   if (store.musicList.length <= 1) {
-    Toast('播放列表无更多歌曲');
+    Toast("播放列表无更多歌曲");
   }
 };
 
 const getlyric = async () => {
-  let txt = await await getLyric(store.musicList[store.index].id);
+  let txt = await getLyric(store.musicList[store.index].id);
   store.lyric = txt.data.lrc.lyric;
 };
 
@@ -364,10 +385,10 @@ const closeDetail = (value: boolean) => {
 
 //接收传过来的拖拽时间
 const changeMusicTime = (value: number) => {
-  if(audio){
+  if (audio) {
     audio.value.currentTime = value;
   }
-}
+};
 </script>
 
 <style scoped lang="less">
