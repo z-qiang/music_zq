@@ -60,7 +60,7 @@ const props = defineProps<msg>();
 .head {
   background-color: pink;
   width: 100%;
-  height: 0.8rem;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   color: white;

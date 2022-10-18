@@ -10,7 +10,7 @@
       <dailytime class="daily__time__word" />
     </div>
     <div class="daily__list">
-      <van-sticky @scroll="scroll">
+      <van-sticky @scroll="scroll" :offset-top="40">
         <div :class="changClass?'daily__list__head':'daily__list__headtop'"></div>
       </van-sticky>
       <div class="daily__list__music" v-for="(item,index) in data.msgDaily" :key="index" @click="playMusic({id: item.id,al: {picUrl: item.picUrl,name: item.song.artists[0].name},name: item.name })">
@@ -77,6 +77,9 @@ const playMusic = (value:any) => {
 <style scoped lang="less">
 .daily {
   &__head {
+    width: 100%;
+    height: 40px;
+    // display: none;
   }
   &__time {
     width: 100%;
@@ -97,12 +100,9 @@ const playMusic = (value:any) => {
   &__list {
     width: 100%;
     height: 100%;
-    // height: 40rem;
     margin-bottom: 1.1rem;
-    margin-top: -0.3rem;
-
     &__head {
-      opacity: 0.97;
+      margin-top: -0.3rem;
       width: 100%;
       height: 1rem;
       border-top-left-radius: 20px;
@@ -126,7 +126,6 @@ const playMusic = (value:any) => {
     &__headtop{
       width: 100%;
       height: 1rem;
-      margin-top: 0.8rem;
       background-image: linear-gradient(
         to right top,
         #d16ba5,
