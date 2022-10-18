@@ -396,7 +396,7 @@ Toast('单曲循环')
     z-index: -1;
     width: 100%;
     height: 100%;
-    filter: blur(0.3rem);
+    filter: blur(0.05rem);
   }
   &__head {
     padding: @margin;

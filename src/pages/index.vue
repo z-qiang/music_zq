@@ -10,7 +10,7 @@
       <dailytime class="daily__time__word" />
     </div>
     <div class="daily__list">
-      <van-sticky :offset-top="40" @scroll="scroll">
+      <van-sticky @scroll="scroll">
         <div :class="changClass?'daily__list__head':'daily__list__headtop'"></div>
       </van-sticky>
       <div class="daily__list__music" v-for="(item,index) in data.msgDaily" :key="index" @click="playMusic({id: item.id,al: {picUrl: item.picUrl,name: item.song.artists[0].name},name: item.name })">
@@ -56,36 +56,7 @@ defineProps<date>();
 
 //改变形状
 const changClass = ref(true);
-//当前组件所有数据
-// const data = reactive<msg>({
-//   msgDaily: [
-//     {
-//       id: 0,
-//       name: "",
-//       picUrl: "",
-//       song: {
-//         artists: [
-//           {name: ''}
-//         ]
-//       }
-//     },
-//   ],
-//   headName: "好听的歌",
-// });
 
-
-
-// onBeforeMount(async () => {
-//   let res = await dailyRecommendation();
-//   console.log("音乐数据");
-//   console.log(res.data.result);
-//   data.msgDaily = res.data.result;
-// });
-
-//获取标题
-// if (route.meta.name) {
-//   data.headName = route.meta.name as string;
-// }
 
 
 //监听musicTitle滚动
@@ -153,8 +124,9 @@ const playMusic = (value:any) => {
       );
     }
     &__headtop{
-       width: 100%;
+      width: 100%;
       height: 1rem;
+      margin-top: 0.8rem;
       background-image: linear-gradient(
         to right top,
         #d16ba5,

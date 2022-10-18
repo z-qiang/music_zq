@@ -256,8 +256,6 @@ const musicCurrentTime = () => {
 watch(
   store,
   async (newV, oldV) => {
-    console.log("福格但", store.musicList[0].id);
-
     src.url = `https://music.163.com/song/media/outer/url?id=${
       store.musicList[store.index]?.id
     }.mp3`;

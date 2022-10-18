@@ -44,8 +44,6 @@ const createPro = (index: number,arr: Array<any>) => {
 
 onBeforeMount(async () => {
   const res = await musicList();
-  console.log('歌单部分数据',res);
-  
   const val = res.data.data.slice(0,20);
   let arr = new Array();
   //取出前20
