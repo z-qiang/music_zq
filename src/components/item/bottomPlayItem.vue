@@ -103,7 +103,7 @@
           ></path>
         </svg>
       </van-button>
-      <van-button class="bottomplay__right-detail">
+      <van-button class="bottomplay__right-detail" @click.stop="isShowMusicPlayList">
         <svg
           t="1663849406137"
           class="icon"
@@ -187,6 +187,9 @@
       </van-popup>
     </div>
     <VanDialog />
+    <van-popup v-model:show="showMusicPlayList" position="bottom" :style="{ height: '70%' }">
+      <PlayMusicList />
+    </van-popup>
   </div>
 </template>
 
@@ -195,10 +198,10 @@ import { ref, onBeforeMount, watch, reactive, nextTick, onMounted } from "vue";
 import { Button } from "vant";
 import { mainStore } from "../../store/index";
 import { getMusic } from "../../api/home/index";
-import { Popup } from "vant";
+import { Popup,Toast, Dialog } from "vant";
 import MusicDetail from "./musicDeatil.vue";
 import { getLyric } from "../../api/home/index";
-import { Toast, Dialog } from "vant";
+import PlayMusicList from '@/components/playMusicList/index.vue';
 
 const VanDialog = Dialog.Component;
 
@@ -221,7 +224,6 @@ let src = reactive({
   musicName: "",
   musicState: false,
 });
-// let audio = ref<HTMLDivElement>();
 let audio: any = ref<HTMLDivElement>();
 
 let musicState = ref(store.musicState);
@@ -231,17 +233,17 @@ let inter: any = reactive({});
 //存储歌曲时间
 let timer = ref<number>(0);
 
-onBeforeMount(async () => {
-  // src.url = `https://music.163.com/song/media/outer/url?id=${
-  //   store.musicList[store.index].id
-  // }.mp3`;
-  // src.imgSrc = store.musicList[store.index]?.al?.picUrl;
-  // src.musicName = store.musicList[store.index]?.name;
-  // src.musicState = store.musicState;
-  // //存储歌词
-  // let txt = await getLyric(store.musicList[store.index].id);
-  // store.lyric = txt.data.lrc.lyric;
-});
+// onBeforeMount(async () => {
+//   // src.url = `https://music.163.com/song/media/outer/url?id=${
+//   //   store.musicList[store.index].id
+//   // }.mp3`;
+//   // src.imgSrc = store.musicList[store.index]?.al?.picUrl;
+//   // src.musicName = store.musicList[store.index]?.name;
+//   // src.musicState = store.musicState;
+//   // //存储歌词
+//   // let txt = await getLyric(store.musicList[store.index].id);
+//   // store.lyric = txt.data.lrc.lyric;
+// });
 
 //传递歌曲播放了多久
 const musicCurrentTime = () => {
@@ -293,6 +295,7 @@ watch(
   }
 );
 
+//查看歌曲是否需要vip
 watch(
   () => {
     store.playMessage;
@@ -311,6 +314,27 @@ watch(
   }
 );
 
+//判断播放状态
+watch(() => {store.musicState},()=>{
+  if(store.musicState){
+    audio.value.play();
+  }else{
+    audio.value.pause();
+  }
+},{
+  deep: true,
+})
+
+watch(() => {
+  store.isMusicList
+},()=>{
+  if(store.isMusicList){
+    show.value = false;
+    showMusicPlayList.value = false;
+  }
+},{
+  deep: true,
+})
 //method
 
 //判断播放状态
@@ -387,6 +411,13 @@ const changeMusicTime = (value: number) => {
     audio.value.currentTime = value;
   }
 };
+
+//显示播放列表
+const showMusicPlayList = ref(false);
+const isShowMusicPlayList = () => {
+  showMusicPlayList.value = true;
+}
+
 </script>
 
 <style scoped lang="less">

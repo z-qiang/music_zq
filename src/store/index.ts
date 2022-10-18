@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { copy } from '../function/index';
 
 type mL = {
@@ -47,7 +47,9 @@ const mainStore = defineStore('main', {
             //底部播放器
             bMusic: true,
             //是否可以播放
-            playMessage: false
+            playMessage: false,
+            //musicList是否为空
+            isMusicList: false,
         }
     },
     actions: {
@@ -100,15 +102,18 @@ const mainStore = defineStore('main', {
                     // }
                 } else {
                     this.playMessage = true;
-                    this.index = 0;
+                    // this.index = 0;
                 }
             };
-            if (state == '单曲') {
+            if(this.isMusicList){
+                this.musicList.unshift(val);
+                this.musicList.pop();
+                this.musicState = true;
+                this.bMusic = true;
+                this.isMusicList = false;
+            }else{
                 getIsPlayMsg(val.id);
-            } else {
-                getIsPlayMsg(val[0].id);
             }
-            // this.playMessage = !this.playMessage
         },
         //播放音乐，传入audio
         playMusic() {
@@ -125,6 +130,31 @@ const mainStore = defineStore('main', {
                 this.searchHistory.unshift(historyList);
                 this.searchHistory = [...new Set(this.searchHistory)];
             }
+        },
+        //删除播放列表歌曲
+        delMusicListAttr(index: number): void {
+            //歌曲列表是否全部删除
+            if (this.musicList.length > 1) {
+                this.musicList.splice(index, 1);
+                if (index == this.index) {
+                    this.index = 0;
+                } else {
+                    this.index = this.index - 1;
+                }
+            } else {
+                this.index = 0;
+                this.isMusicList = true;
+                this.musicState = false;   
+                this.bMusic = false;         
+            }
+        },
+        //播放列表全部删除
+        delAllMusicList():void{
+            this.musicList.splice(0, this.musicList.length-1);
+            this.index = 0;
+            this.isMusicList = true;
+            this.musicState = false;  
+            this.bMusic = false;   
         }
     },
 });
