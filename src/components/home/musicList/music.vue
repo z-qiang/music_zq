@@ -67,14 +67,13 @@ type musiclist = {
 let data = defineProps<Props>();
 
 let musicList = reactive<musiclist>({
-  msg: "",
+  msg: {},
   length: 1,
 });
-//防止一直发送歌曲数据
-let count = 0;
+
 onBeforeMount(async () => {
   let value = await getmusicListItemMusic(data.props.id);
-  musicList.msg = value.data.songs; 
+  musicList.msg = value.data.songs;
 });
 
 const playMusic = (index: any) => {
@@ -87,13 +86,12 @@ const playMusic = (index: any) => {
     },
     name: "小宇",
   };
-  aa.id = musicList.msg[index].id;
-  aa.al.name = musicList.msg[index].al.name;
-  aa.al.picUrl = musicList.msg[index].al.picUrl;
-  aa.name = musicList.msg[index].name;
-  if (count !== index) {
+  if (musicList.msg) {
+    aa.id = musicList.msg[index].id;
+    aa.al.name = musicList.msg[index].al.name;
+    aa.al.picUrl = musicList.msg[index].al.picUrl;
+    aa.name = musicList.msg[index].name;
     store.addMusic(aa, "单曲");
-    count = index;
   }
   store.musicState = true;
 };

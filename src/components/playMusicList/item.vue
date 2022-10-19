@@ -53,9 +53,9 @@ import { defineProps, withDefaults } from "vue";
 import { mainStore } from "../../store/index";
 
 interface Props {
-  musicName: string;
-  singerName: string;
-  index: number | string;
+  musicName: string,
+  singerName: string,
+  index: number,
   showPlayIcon: number,
 }
 
